@@ -1,9 +1,8 @@
-"use strict";
+'use strict';
 
-const BaseObject = require("../../../baseObject");
+const BaseObject = require('../../../baseObject');
 
 class SearchField extends BaseObject {
-
     constructor() {
         super();
         this.field = undefined;
@@ -16,14 +15,19 @@ class SearchField extends BaseObject {
     }
 
     _getAttributes() {
+        if (this.operator) {
+            return {
+                operator: this.operator,
+                'xsi:type': `${this._type}:${this._name}`,
+            };
+        }
+
         return {
-            "operator": this.operator,
-            "xsi:type": `${this._type}:${this._name}`,
+            'xsi:type': `${this._type}:${this._name}`,
         };
     }
 
     getNode() {
-
         const attributes = this._getAttributes();
         const type = this._getSoapType();
 
@@ -32,15 +36,15 @@ class SearchField extends BaseObject {
         }
 
         if (!this.field) {
-            throw new Error("search criteria field not set");
+            throw new Error('search criteria field not set');
         }
 
-        if (!this.operator) {
-            throw new Error("search criteria operator not set");
+        if (!['SearchBooleanField'].includes(this._name) && !this.operator) {
+            throw new Error('search criteria operator not set');
         }
 
         if (!this.searchValue) {
-            throw new Error("search criteria searchValue not set");
+            throw new Error('search criteria searchValue not set');
         }
 
         const node = {};
@@ -48,12 +52,12 @@ class SearchField extends BaseObject {
         node[type] = {};
 
         if (attributes) {
-            node[type]["$attributes"] = attributes;
+            node[type]['$attributes'] = attributes;
         }
 
-        node[type]["platformCore:searchValue"] = {};
-        node[type]["platformCore:searchValue"]["$attributes"] = {};
-        node[type]["platformCore:searchValue"]["$value"] = this.searchValue;
+        node[type]['platformCore:searchValue'] = {};
+        node[type]['platformCore:searchValue']['$attributes'] = {};
+        node[type]['platformCore:searchValue']['$value'] = this.searchValue;
 
         return node;
     }

@@ -56,6 +56,13 @@ class SearchBasic extends SearchRecord {
         fieldType.searchValue = searchValue;
         this.searchFields.push(fieldType);
     }
+
+    addNoOperatorSearchField(fieldType, fieldName, searchValue) {
+        if (!fieldName || !fieldName || !searchValue) return;
+        fieldType.field = fieldName;
+        fieldType.searchValue = searchValue;
+        this.searchFields.push(fieldType);
+    }
 }
 
 module.exports = SearchBasic;
